@@ -1,8 +1,8 @@
 
 [tool.poetry]
-name = "habits_coursework"
+name = "Habit_Tracker_Coursework"
 version = "0.4.0"
-authors = ["name <email>"]
+authors = ["<email>"]
 readme = "README.md"
 description = 'Проект для управления привычками с использованием Django, Celery и Telegram Bot.'
 
