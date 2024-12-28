@@ -1,9 +1,15 @@
 from django.core.exceptions import ValidationError
 
-
 def validate_habit_fields(instance):
+    """
+    Валидатор для проверки полей модели Habit.
+
+    Проверяет, существует ли переданный экземпляр привычки. 
+    Если экземпляр отсутствует, выбрасывается исключение ValidationError.
+    """
     if not instance:
-        raise ValidationError("Привычка не найдена.")
+        raise ValidationError("Привычка не найдена.")
+
 
     # Время на выполнение должно быть <= 120 секунд
     if instance.duration is not None and instance.duration > 120:

@@ -32,7 +32,32 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOW_ALL_ORIGINS = True
+# Настройки CORS
+CORS_ALLOWED_ORIGINS = [  
+    "http://localhost:8000",  
+    "http://127.0.0.1:8000",
+]
+
+# Разрешить все заголовки
+CORS_ALLOW_HEADERS = "*"
+
+# Разрешить все методы
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+# Разрешить отправку credentials (cookies, authorization headers)
+CORS_ALLOW_CREDENTIALS = True
+
+
+# В режиме разработки можно разрешить все origins
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
 
 # Redis настройки
 CELERY_BROKER_URL = "redis://localhost:6379/0"
@@ -83,6 +108,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
