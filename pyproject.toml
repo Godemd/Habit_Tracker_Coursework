@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "Habit_Tracker_Coursework"
 version = "0.4.0"
-authors = ["<email>"]
+authors = ["Danil <dandigrom1@gmai.com>"]
 readme = "README.md"
-description = 'Проект для управления привычками с использованием Django, Celery и Telegram Bot.'
+description = 'Error'
+packages = [{ include = "habits_project" }]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
