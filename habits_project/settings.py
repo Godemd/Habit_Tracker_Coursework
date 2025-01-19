@@ -26,6 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY_DJANGO")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,9 +34,16 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Настройки CORS
-CORS_ALLOWED_ORIGINS = [  
-    "http://localhost:8000",  
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
     "http://127.0.0.1:8000",
+    # добавьте другие домены, если необходимо
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    # добавьте другие домены, если необходимо
 ]
 
 # Разрешить все заголовки
@@ -54,13 +62,16 @@ CORS_ALLOW_METHODS = [
 # Разрешить отправку credentials (cookies, authorization headers)
 CORS_ALLOW_CREDENTIALS = True
 
-
 # В режиме разработки можно разрешить все origins
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 
 # Redis настройки
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
+REDIS_PORT = os.getenv('REDIS_PORT', '6379')
+
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
