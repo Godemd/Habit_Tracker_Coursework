@@ -97,7 +97,7 @@
 
    ```bash
    git clone https://github.com/Godemd/Habit_Tracker_Coursework.git
-   cd Mahiru_Habits_Coursework
+   cd Habit_Tracker_Coursework
    ```
 
 2. Создать файл `.env` на основе `.env_template`
