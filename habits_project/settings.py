@@ -31,7 +31,7 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ALLOWED_HOSTS = ['84.252.137.50', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["ip адрес", "127.0.0.1", "localhost"]
 
 # Настройки CORS
 CORS_ALLOWED_ORIGINS = [
