@@ -1,19 +1,31 @@
-FROM python:3.10-slim
+# Установите базовый образ
+FROM python:3.12-slim
 
-WORKDIR /code
+# Установите рабочую директорию
+WORKDIR /app
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Скопируйте исходный код
+COPY . /app
 
-COPY pyproject.toml .
-COPY poetry.lock .
+# Установите зависимости для сборки
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip install poetry && \
-    poetry config virtualenvs.create false && \
-    poetry install --no-dev
+# Установите Poetry и зависимости
+ENV POETRY_VERSION=2.0.1
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    ln -s "${HOME}/.local/bin/poetry" /usr/local/bin/poetry && \
+    poetry install --no-root
 
-COPY . .
+COPY docker-entrypoint.sh /usr/local/bin/
 
-RUN chmod +x /code/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-ENTRYPOINT ["/code/docker-entrypoint.sh"] 
+# Настройка порта для приложения
+EXPOSE 8000
+
+# Команда для запуска приложения
+CMD ["poetry", "run", "gunicorn", "habits_project.wsgi:application", "--bind", "0.0.0.0:8000"]
