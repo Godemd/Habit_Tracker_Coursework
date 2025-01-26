@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
+    libpq-dev \
+    
 # Установите Poetry и зависимости
 ENV POETRY_VERSION=1.8.3
 RUN curl -sSL https://install.python-poetry.org | python3 - && \
