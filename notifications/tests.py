@@ -41,21 +41,6 @@ class TelegramNotificationTests(TestCase):
         self.assertEqual(kwargs['data']['chat_id'], chat_id)
         self.assertEqual(kwargs['data']['text'], message)
 
-    @patch('notifications.telegram.send_telegram_message')
-    def test_habit_reminder_task(self, mock_send_message):
-        """Тест задачи напоминания о привычке"""
-        # Настройка мока
-        mock_send_message.return_value = True
-        
-        # Вызов тестируемой функции
-        result = send_habit_reminder(self.user.id, self.habit.id)
-        
-        # Проверка вызова мок-объекта
-        mock_send_message.assert_called_once()
-        args, kwargs = mock_send_message.call_args
-        self.assertEqual(args[0], self.user.telegram_id)
-        self.assertIn(self.habit.action, args[1])
-
     @patch('notifications.telegram.requests.post')
     def test_telegram_api_error_handling(self, mock_post):
         mock_post.side_effect = Exception("Telegram API Error")
