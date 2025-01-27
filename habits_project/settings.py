@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
-
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -95,8 +95,8 @@ AUTH_USER_MODEL = "users.User"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_USE_TLS = eval(os.getenv("EMAIL_USE_TLS"))
-EMAIL_USE_SSL = eval(os.getenv("EMAIL_USE_SSL"))
+EMAIL_USE_TLS = bool(os.getenv("EMAIL_USE_TLS"))
+EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL"))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -154,14 +154,7 @@ WSGI_APPLICATION = "habits_project.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", default="5432"),
-    }
+    'default': dj_database_url.config(default='postgres://login:password@localhost:5432/Habits')
 }
 
 # settings.py
@@ -224,7 +217,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-SSTATIC_URL = "static/"
+# URL для доступа к статическим файлам
+STATIC_URL = '/static/'
+
+# Папка для собранных статических файлов
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Дополнительные директории для поиска статических файлов (если есть)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 
 MEDIA_URL = "/media/"

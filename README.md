@@ -3,7 +3,7 @@
 ## Описание проекта
 
 Проект представляет собой REST API сервис для отслеживания полезных привычек. Пользователи могут создавать, отслеживать и делиться своими привычками, получать уведомления через Telegram.
-
+Приложение доступно по IP адресу: http://51.250.38.97/api/habits/
 ## Функциональность
 
 - Регистрация и авторизация пользователей
@@ -17,6 +17,7 @@
 
 ## Технологии
 
+- Python 3.10+
 - Django 5.1
 - Django REST Framework
 - PostgreSQL
@@ -24,6 +25,9 @@
 - Redis
 - Simple JWT
 - Swagger/drf-yasg
+- Docker & Docker Compose
+- Nginx
+
 
 ## Установка и запуск
 
@@ -31,6 +35,8 @@
 
 - PostgreSQL
 - Redis
+- Docker
+- Docker Compose
 
 ### Установка
 
@@ -85,6 +91,88 @@
 4. Настройте Redis сервер (опционально):
    - Откройте файл конфигурации `redis.conf` и внесите необходимые изменения.
 
+### Локальная разработка
+
+1. Клонировать репозиторий:
+
+   ```bash
+   git clone https://github.com/Godemd/Habit_Tracker_Coursework.git
+   cd Habit_Tracker_Coursework
+   ```
+
+2. Создать файл `.env` на основе `.env_template`
+
+   ```bash
+   cp .env.template .env
+   ```
+
+   Заполнить необходимые переменные окружения в файле .env
+
+3. Собрать и запустить контейнеры:
+
+   ```bash
+   docker-compose up -d --build
+   ```
+
+4. Проект будет доступен по адресу: http://localhost:8000
+
+### Остановка проекта
+
+```bash
+docker-compose down
+```
+## Настройка CI/CD
+
+### GitHub Actions
+
+1. Добавьте следующие секреты в настройки GitHub репозитория:
+
+   - `SERVER_HOST` - IP-адрес вашего сервера
+   - `SERVER_USER` - Имя пользователя на сервере
+   - `SSH_PRIVATE_KEY` - SSH-ключ для доступа к серверу
+
+2. При пуше в ветку main автоматически запускаются:
+   - Тесты
+   - Линтинг кода
+   - Сборка Docker образов
+   - Деплой на сервер
+
+### Настройка сервера
+
+1. Установите Docker:
+
+   ```bash
+   sudo apt update
+   sudo apt install docker.io
+   ```
+
+2. Установите Docker Compose:
+
+   ```bash
+   sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   sudo chmod +x /usr/local/bin/docker-compose
+   ```
+
+3. Настройте SSH доступ для GitHub Actions
+
+## Функциональность
+
+- Регистрация и авторизация пользователей
+- CRUD операции с привычками
+- Публичные и приватные привычки
+- Интеграция с Telegram для уведомлений
+- Отложенные задачи через Celery
+- Валидация данных привычек
+- Пагинация (5 привычек на страницу)
+- API документация (Swagger/ReDoc)
+
+## Тестирование
+
+Запуск тестов в Docker:
+
+```bash
+docker-compose exec web python manage.py test
+```
 ### Запуск
 
 1. Запустить Redis сервер.
