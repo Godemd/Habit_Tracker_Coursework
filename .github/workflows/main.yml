@@ -89,16 +89,24 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true 
+          push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/habits_project:latest
 
+      - name: Start SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Deploy to server
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-            docker pull ${{ secrets.DOCKER_USERNAME }}/habits_project:latest
+          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
+            docker pull $DOCKER_USERNAME/habits_project:latest
             docker stop habits_project || true
             docker rm habits_project || true
-            docker run -d --name habits_project -p 80:80 ${{ secrets.DOCKER_USERNAME }}/habits_project:latest
+            docker run -d --name habits_project -p 80:80 $DOCKER_USERNAME/habits_project:latest
           EOF
-        env:
-          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
