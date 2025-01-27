@@ -14,14 +14,14 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Установите Poetry и зависимости
-RUN curl -sSL https://install.python-poetry.org | python3 - && \
-    ln -s "${HOME}/.local/bin/poetry" /usr/local/bin/poetry && \
-    poetry install --no-root
+# Установка Poetry
+ENV POETRY_VERSION=2.0.1
+RUN curl -sSL https://install.python-poetry.org -o install-poetry.py && \
+    python3 install-poetry.py --version $POETRY_VERSION && \
+    ln -s "${HOME}/.local/bin/poetry" /usr/local/bin/poetry
 
-COPY docker-entrypoint.sh /usr/local/bin/
+# Проверка версии Poetry
+RUN poetry --version
 
-# Настройка порта для приложения
-EXPOSE 8000
-
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# Установка зависимостей проекта
+RUN poetry install --no-root
