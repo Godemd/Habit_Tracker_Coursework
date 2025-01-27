@@ -23,5 +23,8 @@ RUN curl -sSL https://install.python-poetry.org -o install-poetry.py && \
 # Проверка версии Poetry
 RUN poetry --version
 
+# Копирование файлов проекта
+COPY pyproject.toml poetry.lock ./
+
 # Установка зависимостей проекта
 RUN poetry install --no-root
