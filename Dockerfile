@@ -11,20 +11,20 @@ COPY . /app
 RUN apt-get update && apt-get install -y \
     curl \
     build-essential \
+    libpq-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Установка Poetry
-ENV POETRY_VERSION=2.0.1
-RUN curl -sSL https://install.python-poetry.org -o install-poetry.py && \
-    python3 install-poetry.py --version $POETRY_VERSION && \
-    ln -s "${HOME}/.local/bin/poetry" /usr/local/bin/poetry
+# Установите Poetry и зависимости
+ENV POETRY_VERSION=1.8.3
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    ln -s "${HOME}/.local/bin/poetry" /usr/local/bin/poetry && \
+    poetry install --no-root
 
-# Проверка версии Poetry
-RUN poetry --version
+COPY docker-entrypoint.sh /usr/local/bin/
 
-# Копирование файлов проекта
-COPY pyproject.toml poetry.lock ./
 
-# Установка зависимостей проекта
-RUN poetry install --no-root
+# Настройка порта для приложения
+EXPOSE 8000
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
